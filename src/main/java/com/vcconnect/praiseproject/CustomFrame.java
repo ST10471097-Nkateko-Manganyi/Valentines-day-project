@@ -10,10 +10,8 @@ package com.vcconnect.praiseproject;
  */
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,44 +19,66 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- *
- * @author nkatekomanganyi
- */
 public class CustomFrame extends JFrame implements ActionListener {
 
+    // Enter your name panel
+    JPanel namePanel = new JPanel();
     JTextField nameField = new JTextField(12);
-    JLabel displayText = new JLabel();
-    
+    JButton btnContinue = new JButton("Continue");
 
-    JButton button1 = new JButton("Yes of course 😝");
-    JButton button2 = new JButton("NO 👎🏾");
+    //Question Panle
+    JPanel questionPanel = new JPanel();
+    JLabel valentineLabel = new JLabel("Will you be my Valentine? 💕");
+    JButton buttonYes = new JButton("Yes of course 😝");
+    JButton buttonNo = new JButton("NO 👎");
+
+    //Response Panel
+    JPanel responsePanel = new JPanel();
+    JLabel displayText = new JLabel("");
 
     public CustomFrame() {
-        setSize(350, 500);
-        setTitle("Valentines day proposal");
+
+        setTitle("Valentines Day Proposal");
+        setSize(500, 320);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setLayout(new FlowLayout(FlowLayout.CENTER, 10, 12));
 
-        Font font = new Font("Arial", Font.BOLD, 16);
+        Font headingFont = new Font("Arial", Font.BOLD, 16);
+        Font normalFont = new Font("Arial", Font.PLAIN, 14);
 
-        JLabel namePrompt = new JLabel("Enter your name");
+        //Name 
+        namePanel.setLayout(new FlowLayout());
+        JLabel namePrompt = new JLabel("Enter your name:");
+        namePrompt.setFont(normalFont);
 
-        JLabel heading = new JLabel("Will you be my valentine?🥹");
-        heading.setFont(font);
+        namePanel.add(namePrompt);
+        namePanel.add(nameField);
+        namePanel.add(btnContinue);
 
-        setLayout(new FlowLayout());
+        //Question  
+        questionPanel.setLayout(new FlowLayout());
+        valentineLabel.setFont(headingFont);
 
-        add(heading);
-        add(namePrompt);
-        add(nameField);
-        add(button1);
-        add(button2);
-        add(displayText);
+        questionPanel.add(valentineLabel);
+        questionPanel.add(buttonYes);
+        questionPanel.add(buttonNo);
+        questionPanel.setVisible(false);
 
-        button1.addActionListener(this);
-        button2.addActionListener(this);
-        nameField.addActionListener(this);
+        //response 
+        responsePanel.setLayout(new FlowLayout());
+        displayText.setFont(headingFont);
+
+        responsePanel.add(displayText);
+        responsePanel.setVisible(true);
+
+        add(namePanel);
+        add(questionPanel);
+        add(responsePanel);
+
+        btnContinue.addActionListener(this);
+        buttonYes.addActionListener(this);
+        buttonNo.addActionListener(this);
     }
 
     @Override
@@ -66,18 +86,42 @@ public class CustomFrame extends JFrame implements ActionListener {
 
         String name = nameField.getText().trim();
 
-        if (name.isEmpty() || !name.equalsIgnoreCase("Praise")) {
-            JOptionPane.showMessageDialog(this, "Oh ya, you can only be my valentine if you're Praise🙃");
-            return;
+        //Continue
+        if (e.getSource() == btnContinue) {
+
+            if (name.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter your name.");
+                return;
+            }
+
+            if (name.equalsIgnoreCase("Nkateko")) {
+                JOptionPane.showMessageDialog(this, "Nooooo, not my name bra😂");
+                return;
+            }
+
+            if (!name.equalsIgnoreCase("Praise")) {
+                JOptionPane.showMessageDialog(this, "No man, okare this proposal is not for you😐🖕");
+                return;
+            }
+
+            questionPanel.setVisible(true);
+            nameField.setEnabled(false);
+            btnContinue.setEnabled(false);
         }
 
-        if (e.getSource() == button1) {
-            displayText.setText("Yayyyyy!!!!😝");
+        //yes and no
+        if (e.getSource() == buttonYes) {
+            displayText.setText("Nxawwwww🥹" + "\nI love you girl💕");
+            responsePanel.setVisible(true);
+        }
+        if (e.getSource() == buttonNo) {
+            displayText.setText("Ha why?🥺");
+            responsePanel.setVisible(true);
+
         }
 
-        if (e.getSource() == button2) {
-            displayText.setText("Hayi, since you're " + name + " you'll be my valentine anyways🙃");
-        }
+        buttonNo.setEnabled(false);
+
     }
 
 }
